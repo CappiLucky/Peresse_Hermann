@@ -1,0 +1,7 @@
+23 MAI 2020 : 
+
+Création du présent dossier contenant :
+   - le sujet du projet (inchangé)
+   - l'article "Seam Carving for Media Retargeting",Ariel Shamir and Shai Avidan, 2009
+   - l'article "A Performance Analysis for Seam Carving Algorithm", Zehra Karapinar Senturk & al. 2014
+
