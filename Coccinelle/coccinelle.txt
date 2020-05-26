@@ -1,0 +1,26 @@
+La grille de base est : 
+3 1 2 4 5 
+1 72 3 6 6 
+89 27 1 12 3 
+46 2 8 7 15 
+36 34 1 13 30 
+2 4 11 26 66 
+1 10 15 1 2 
+2 4 3 9 6 
+
+La matrice M[L][C] de terme général m(l,c) :
+279 277 278 149 145 
+205 276 145 140 140 
+204 142 115 134 125 
+115 71 98 114 122 
+64 69 51 90 107 
+16 28 35 50 77 
+5 14 24 10 11 
+2 4 3 9 6 
+
+Résultats et analyse : 
+La coccinelle a mangé : 279 pucerons.
+Ella a parcouru le chemin : (3,0)(2,1)(2,2)(1,3)(0,4)(0,5)(1,6)(0,7)
+Elle a atteri sur la case : (3,0).
+Elle a fait l'interview sur la case : (0,7).
+

@@ -1,6 +1,5 @@
 // programme pour la partie 1
 
-import java.util.Scanner; //permet d'importer la classe Scanner pour rentrer des valeurs a la main
 import java.lang.Math; //permet d'importer la class Math pour calculer les max
 
 /**
@@ -40,7 +39,7 @@ public class Coccinelle {
 
 		int[][] path = getPath(M);
 		System.out.print("Ella a parcouru le chemin : ");
-	       	printPath(path);
+	  printPath(path);
 
 		int[] firstCase = getFirstCase(path);
 		System.out.print("Elle a atteri sur la case : ");
@@ -164,8 +163,36 @@ public class Coccinelle {
 		path[M.length-1][0] = maxLigne(M[M.length-1])[1];
 		path[M.length-1][1] = M.length-1;
 
-		for (int y = M.length-2 ; y >= 0 ; y--){
+		for (int y = M.length-1 ; y > 0 ; y--){
+			path[y-1][1] = y-1; //on met a jour le y
+			int x_actual = path[y][0];
 
+			if (x_actual == 0){//cas ou on est tout a gauche
+				if(M[y-1][x_actual] >= M[y-1][x_actual+1]){
+					path[y-1][0] = x_actual;
+				} else {
+					path[y-1][0] = x_actual+1;
+				}
+			}
+
+			else if (x_actual == M[0].length -1){ //cas ou on est tout a droite
+				if(M[y-1][x_actual] >= M[y-1][x_actual-1]){
+					path[y-1][0] = x_actual;
+				} else path[y-1][0] = x_actual-1;
+			}
+
+
+			else { //cas général
+				if (M[y-1][x_actual] >= M[y-1][x_actual+1] && M[y-1][x_actual] >= M[y-1][x_actual-1]) {
+					path[y-1][0] = x_actual;
+				}
+				else if (M[y-1][x_actual+1] >= M[y-1][x_actual] && M[y-1][x_actual+1] >= M[y-1][x_actual-1]){
+					path[y-1][0] = x_actual+1;
+				}
+				else {
+					path[y-1][0] = x_actual-1;
+				}
+			}
 		}
 
 		return path;
