@@ -6,7 +6,7 @@ import java.lang.Math; //permet d'importer la class Math pour calculer les max
 /**
  *@author Manon HERMANN Théo PERESSE
  *@version V1
- *Ce programme est un programme de programmation dynamique afin de trouver le chemin le plus 
+ *Ce programme est un programme de programmation dynamique afin de trouver le chemin le plus
  *rentable en mangant le plus de pucerons possible.
  */
 
@@ -17,7 +17,7 @@ public class Coccinelle {
 
 	// Méthode principale qui se contente d'appeler d'autres fonctions
 	public static void main (String[] args){
-		
+
 		int[][] grille = {
 			{2,4,3,9,6},
 			{1,10,15,1,2},
@@ -33,7 +33,7 @@ public class Coccinelle {
 		System.out.println("La matrice M[L][C] de terme général m(l,c) :");
 		int M[][] = calculGrille(grille);
 		printGrille(M);
-		
+
 		System.out.println("Résultats et analyse : ");
 		int total = getTotal(M);
 		System.out.println("La coccinelle a mangé : "+total+" pucerons.");
@@ -43,32 +43,32 @@ public class Coccinelle {
 	       	printPath(path);
 
 		int[] firstCase = getFirstCase(path);
-		System.out.print("Elle a atteri sur la case : "); 
+		System.out.print("Elle a atteri sur la case : ");
 		printCase(firstCase);
-		
+
 		int[] lastCase = getLastCase(path);
-		System.out.print("Elle a fait l'interview sur la case : "); 
+		System.out.print("Elle a fait l'interview sur la case : ");
 		printCase(lastCase);
-		
+
 		System.exit(0);
 	}
-	
+
 
 	/**
 	 * Calcul le tableau M[C][L] de terme général m(c,l)
 	 * @param grille Une grille qui sert de base pour le calcul
-	 * @return M la matrice M 
+	 * @return M la matrice M
 	 */
 
 	public static int[][] calculGrille(final int[][] grille){
 
-		int[][] M = new int[grille.length][grille[0].length];	
-	
+		int[][] M = new int[grille.length][grille[0].length];
+
 		//cas initial
 		for(int c=0; c < 5; c++){M[0][c]=grille[0][c];}
 
 		//cas général
-		for (int l = 1 ; l < M.length ; l++){	
+		for (int l = 1 ; l < M.length ; l++){
 
 			for(int c = 0 ; c < M[0].length; c++){
 
@@ -80,16 +80,14 @@ public class Coccinelle {
 			}
 		}
 		return M;
-
-
 	}
-	
+
 	/**
 	 * Permet d'afficher une grille simplement
 	 * @param grille La grille a afficher
 	 */
 	public static void printGrille(final int[][] grille){
-		for(int i=0;i < grille.length; i++){
+		for(int i=grille.length-1;i >= 0; i--){
 			for(int j=0;j<grille[0].length;j++){
 				System.out.print(grille[i][j] + " ");
 			}
@@ -98,7 +96,7 @@ public class Coccinelle {
 		System.out.println("");
 	}
 
-	
+
 	/**
 	 * Retourne la valeur max entre les 3 parametres
 	 * @param n1 valeur1
@@ -117,7 +115,7 @@ public class Coccinelle {
 	 * @param n1 valeur1
 	 * @param n2 valeur2
 	 * @return max Le max entre les 2 valeurs
-	 * @see max3 pour le ax entre 3 valeurs
+	 * @see max3 pour le max entre 3 valeurs
 	 */
 	public static int max2(final int n1, final int n2){
 		return Math.max(n1,n2);
@@ -129,7 +127,7 @@ public class Coccinelle {
 	 * @return tab tableau dont la structure est expliquée ci dessus
 	 */
 	public static int[] maxLigne(final int[] ligne){
-		
+
 		int[] retour = new int[2];
 		int maxLigne = 0, positionLigne = 0;
 
@@ -162,12 +160,17 @@ public class Coccinelle {
 	 */
 	public static int[][] getPath( final int[][] M){
 		int[][] path = new int[M.length][2];
-		
-		
+
+		path[M.length-1][0] = maxLigne(M[M.length-1])[1];
+		path[M.length-1][1] = M.length-1;
+
+		for (int y = M.length-2 ; y >= 0 ; y--){
+
+		}
 
 		return path;
-
 	}
+
 
 
 	/**
@@ -195,7 +198,7 @@ public class Coccinelle {
 	public static int[] getLastCase(final int[][] path){
 		return path[path.length-1];
 	}
-	
+
 	/**
 	 * Permet d'afficher le chemin suivi par la coccinelle
 	 * @param path le chemin suivi par la coccinelle
