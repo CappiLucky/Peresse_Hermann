@@ -1,7 +1,14 @@
 // programme pour la partie 1
 
-import java.util.Scanner;
-import java.lang.Math;
+import java.util.Scanner; //permet d'importer la classe Scanner pour rentrer des valeurs a la main
+import java.lang.Math; //permet d'importer la class Math pour calculer les max
+
+/**
+ *@author Manon HERMANN Théo PERESSE
+ *@version V1
+ *Ce programme est un programme de programmation dynamique afin de trouver le chemin le plus 
+ *rentable en mangant le plus de pucerons possible.
+ */
 
 
 
@@ -47,16 +54,22 @@ public class Coccinelle {
 	}
 	
 
-	//calcul le tableau M[c][l] de termes général m(c,l)
+	/**
+	 * Calcul le tableau M[C][L] de terme général m(c,l)
+	 * @param grille Une grille qui sert de base pour le calcul
+	 * @return M la matrice M 
+	 */
+
 	public static int[][] calculGrille(final int[][] grille){
 
-		int[][] M = new int[8][5];	
+		int[][] M = new int[grille.length][grille[0].length];	
 	
 		//cas initial
 		for(int c=0; c < 5; c++){M[0][c]=grille[0][c];}
 
 		//cas général
-		for (int l = 1 ; l < M.length ; l++){		
+		for (int l = 1 ; l < M.length ; l++){	
+
 			for(int c = 0 ; c < M[0].length; c++){
 
 				if(c == M[0].length-1) M[l][c] = grille[l][c] + max2(M[l-1][c],M[l-1][c-1]);
@@ -71,6 +84,10 @@ public class Coccinelle {
 
 	}
 	
+	/**
+	 * Permet d'afficher une grille simplement
+	 * @param grille La grille a afficher
+	 */
 	public static void printGrille(final int[][] grille){
 		for(int i=0;i < grille.length; i++){
 			for(int j=0;j<grille[0].length;j++){
@@ -82,14 +99,35 @@ public class Coccinelle {
 	}
 
 	
+	/**
+	 * Retourne la valeur max entre les 3 parametres
+	 * @param n1 valeur1
+	 * @param n2 valeur2
+	 * @param n3 valeur3
+	 * @return max Le max entre les 3
+	 * @see max2 pour le max entre 2 valeurs
+	 */
 	public static int max3(final int n1, final int n2, final int n3){
 		return Math.max(n1,Math.max(n2,n3));
 	}
 
+
+	/**
+	 * Retourne la valeur max entre les 2 parametres
+	 * @param n1 valeur1
+	 * @param n2 valeur2
+	 * @return max Le max entre les 2 valeurs
+	 * @see max3 pour le ax entre 3 valeurs
+	 */
 	public static int max2(final int n1, final int n2){
 		return Math.max(n1,n2);
 	}
 
+	/**
+	 * Donne un tableau de deux elements, donc le premier element est la valeur max présente sur la ligne, et le second sa position (indice)
+	 * @param ligne un tableau donc on veut faire l'analyse
+	 * @return tab tableau dont la structure est expliquée ci dessus
+	 */
 	public static int[] maxLigne(final int[] ligne){
 		
 		int[] retour = new int[2];
@@ -104,13 +142,24 @@ public class Coccinelle {
 		retour[0]=maxLigne;
 		retour[1]=positionLigne;
 		return retour;
-		
 	}
 
+	/**
+	 * Donne le total de pucerons mangé au final par la coccinelle si elle emprunte le meilleur chemin
+	 * @param M la matrice dynamique
+	 * @return max Le nombre max de puceron mangé
+	 */
 	public static int getTotal(final int[][] M){
 		return maxLigne(M[M.length-1])[0];
 	}
 
+	/**
+	 * Renvoie le chemin parcouru par la coccinelle sous la forme d'un tableau 2d
+	 * Chaque ligne correspond a un déplacement
+	 * Chaque element du tableau correspond a des coordonnées dans la grille (2 : une en x et une en y)
+	 *@param M La matrice dynamique M
+	 *@return path Le meilleur chemin a suivre
+	 */
 	public static int[][] getPath( final int[][] M){
 		int[][] path = new int[M.length][2];
 		
@@ -121,20 +170,36 @@ public class Coccinelle {
 	}
 
 
-
+	/**
+	 * Renvoie la premiere case, celle sur laquelle la coccinelle s'est posée a l'origine
+	 * @param path Le chemin qu'a suivi la coccinelle
+	 * @return case d'origine
+	 */
 	public static int[] getFirstCase(final int[][] path){
 		return path[0];
 	}
 
+	/**
+	 * Permet d'afficher la case passée en parametres
+	 * @param la case a afficher
+	 */
 	public static void printCase(final int[] cellule){
 		System.out.println("("+cellule[0]+","+cellule[1]+").");
 	}
 
-
+	/**
+	 * Renvoie la dernière case, celle sur laquelle la coccinelle a fini son periple
+	 * @param path le chemin optimal suivi par la coccinelle
+	 * @return case de fin
+	 */
 	public static int[] getLastCase(final int[][] path){
 		return path[path.length-1];
 	}
 	
+	/**
+	 * Permet d'afficher le chemin suivi par la coccinelle
+	 * @param path le chemin suivi par la coccinelle
+	 */
 	public static void printPath(int[][] path){
 		for(int i = 0; i < path.length; i++){
 			System.out.print("("+path[i][0]+","+path[i][1]+")");
