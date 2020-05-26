@@ -20,11 +20,29 @@ public class Coccinelle {
 			{89,27,1,12,3},
 			{1,72,3,6,6},
 			{3,1,2,4,5}};
-
+		System.out.println("La grille de base est : ");
 		printGrille(grille);
+
+		System.out.println("La matrice M[L][C] de terme général m(l,c) :");
 		int M[][] = calculGrille(grille);
 		printGrille(M);
-		System.out.println("La coccinelle a mangé : "+getTotal(M)+" pucerons.");
+		
+		System.out.println("Résultats et analyse : ");
+		int total = getTotal(M);
+		System.out.println("La coccinelle a mangé : "+total+" pucerons.");
+
+		int[][] path = getPath(M);
+		System.out.print("Ella a parcouru le chemin : ");
+	       	printPath(path);
+
+		int[] firstCase = getFirstCase(path);
+		System.out.print("Elle a atteri sur la case : "); 
+		printCase(firstCase);
+		
+		int[] lastCase = getLastCase(path);
+		System.out.print("Elle a fait l'interview sur la case : "); 
+		printCase(lastCase);
+		
 		System.exit(0);
 	}
 	
@@ -93,4 +111,34 @@ public class Coccinelle {
 		return maxLigne(M[M.length-1])[0];
 	}
 
+	public static int[][] getPath( final int[][] M){
+		int[][] path = new int[M.length][2];
+		
+		
+
+		return path;
+
+	}
+
+
+
+	public static int[] getFirstCase(final int[][] path){
+		return path[0];
+	}
+
+	public static void printCase(final int[] cellule){
+		System.out.println("("+cellule[0]+","+cellule[1]+").");
+	}
+
+
+	public static int[] getLastCase(final int[][] path){
+		return path[path.length-1];
+	}
+	
+	public static void printPath(int[][] path){
+		for(int i = 0; i < path.length; i++){
+			System.out.print("("+path[i][0]+","+path[i][1]+")");
+		}
+		System.out.println("");
+	}
 }
