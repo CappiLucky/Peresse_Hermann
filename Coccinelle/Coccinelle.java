@@ -24,6 +24,7 @@ public class Coccinelle {
 		printGrille(grille);
 		int M[][] = calculGrille(grille);
 		printGrille(M);
+		System.out.println("La coccinelle a mangé : "+getTotal(M)+" pucerons.");
 		System.exit(0);
 	}
 	
@@ -86,6 +87,10 @@ public class Coccinelle {
 		retour[1]=positionLigne;
 		return retour;
 		
+	}
+
+	public static int getTotal(final int[][] M){
+		return maxLigne(M[M.length-1])[0];
 	}
 
 }
