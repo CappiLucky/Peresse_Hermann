@@ -35,6 +35,7 @@ public class seam {
 
 		seam imag = new seam(args[0]);
 		writeImg(args[0],pourcentage);
+		System.out.println(input.getRGB(1,1));
 	}
 
 	public static void writeImg(final String path, final int reduc){
@@ -46,7 +47,36 @@ public class seam {
 
 	
 
+	public static int[][] calculEnergie(final int[][] RGBimage){
+		int width = RGBimage[0].length, height = RGBimage.length;
+		int[][] energie = new int[height][width];
+		
 
+		return energie;	
+
+	}
+
+	public static int getEnergie(final int x, final int y, final BufferedImage input){
+
+		int energie = 0;
+
+
+		
+		return energie;
+
+	}
+
+	public static int[][] getRGBimage (final BufferedImage input){
+		int width = input.getWidth(), height = input.getHeight();
+		int[][] RGBimage = new int[height][width];
+
+		for(int row = 0; row < height; row++){
+			for(int col = 0; col < width; col++){
+				RGBimage[row][col] = input.getRGB(col,row);
+			}
+		}
+		return RGBimage;
+	}
 
 
 }
