@@ -5,23 +5,45 @@ import java.io.*;
 import javax.imageio.ImageIO;
 
 public class seam {
-	BufferedImage aImage;
+	static BufferedImage input;
+	static BufferedImage output;
 	int width;
 	int height;
 
-	public seam(){
-		File input = new File("test.jpg");
+	public seam( final String path){
 		try {
-			 aImage = ImageIO.read(input);
+			File imageIN = new File(path);
+			input = ImageIO.read(imageIN);
 		} catch (Exception e){}
-		width = aImage.getWidth();
-		height = aImage.getHeight();
+		width = input.getWidth();
+		height = input.getHeight();
 		System.out.println(width + " " +height);
+
+
 	}
 
+
 	public static void main(String[] args){
-		seam imag = new seam();
+
+		String reduc = args[1];
+
+		if( reduc.contains("%")) {
+			reduc = reduc.replace("%","");
+		}
+
+		int pourcentage = Integer.parseInt(reduc);	
+
+		seam imag = new seam(args[0]);
+		writeImg(args[0],pourcentage);
 	}
+
+	public static void writeImg(final String path, final int reduc){
+		try{
+			File outputfile = new File(path.replace(".jpg","")+reduc+"%.jpg");
+			ImageIO.write(input,"jpg",outputfile);
+		} catch (Exception e){}
+	}
+
 	
 
 
