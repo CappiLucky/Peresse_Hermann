@@ -4,15 +4,12 @@ import java.io.File;
 import java.lang.Math;
 
 
-import java.util.regex.Pattern;
-
-
 
 public class SeamCarving {
 
 	//images declaration
 	private static BufferedImage inputImage; // images than you want to resize
-	private BufferedImage outputImage;//resized image
+	private static BufferedImage outputImage;//resized image
 	private int height; // actual height
 	private int width; // actual width
 	private int[][] rgbImage; // table of each pixels color (in rgb)
@@ -223,8 +220,18 @@ public class SeamCarving {
 		}
 		SeamCarving seam = new SeamCarving(inputImage,"x");
 
-		int required_x = getPercentage(args[1])/100*seam.width;
-		int required_y = getPercentage(args[2])/100*seam.height;
+		int required_x = getPercentage(args[1])*seam.width/100;
+		int required_y = getPercentage(args[2])*seam.height/100;
+
+		String extension = args[0].split("\\.")[1];
+
+		try {
+			File outputFile = new File(String.valueOf(required_x)+"x"+String.valueOf(required_y)+args[0]);
+			ImageIO.write(inputImage,extension.toUpperCase(),outputFile);//modifier pour metre l'image finale
+		} catch (Exception e){
+			System.out.println(e.toString());
+			//System.exit(1);
+		}
 
 		//print de debug, a enlever
 		printGrille(seam.Mx);
