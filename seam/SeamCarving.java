@@ -3,6 +3,11 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.lang.Math;
 
+
+import java.util.regex.Pattern;
+
+
+
 public class SeamCarving {
 
 	//images declaration
@@ -12,13 +17,13 @@ public class SeamCarving {
 	private int width; // actual width
 	private int[][] rgbImage; // table of each pixels color (in rgb)
 	private int[][] energyImage; //table of each pixels energy
-	private int[][] My;
-	private int[][] Mx;
-	private int[][] pathX;
-	private int[][] pathY;
+	private int[][] My; //M matrice with highers numbers on the right
+	private int[][] Mx; //M matrice with highers numbers on the top
+	private int[][] pathX;//vertical path of the less important pixels
+	private int[][] pathY;//horizontal path of the less important pixels
 
 
-	public SeamCarving(final BufferedImage img){
+	public SeamCarving(final BufferedImage img, final String mode){
 		this.height = img.getHeight();
 		this.width = img.getWidth();
 		this.rgbImage = new int[width][height];
@@ -27,7 +32,16 @@ public class SeamCarving {
 		this.My = new int[width][height];
 		this.pathX = new int[height][2];
 		this.pathY = new int[width][2];
-		getrgbImage(img);
+		this.getrgbImage(img);
+		this.setEnergy();
+		if (mode.equals("x")){
+			this.getPathX();
+			this.calculMx();
+		}
+		if (mode.equals("y")){
+			this.calculMy();
+			this.getPathY();
+		}
 	}
 
 	public void getrgbImage(final BufferedImage inputImage){
@@ -86,9 +100,9 @@ public class SeamCarving {
 		return norme;
 	}
 
-	public  void setEnergy(final int xmin, final int xmax, final int ymin, final int ymax){
-		for (int y = ymin; y < ymax ; y++){
-			for (int x = xmin; x < xmax ; x++){
+	public  void setEnergy(){
+		for (int y = 0; y < this.height ; y++){
+			for (int x = 0; x < this.width ; x++){
 				energyImage[x][y] = gradient(x,y);
 			}
 		}
@@ -152,20 +166,6 @@ public class SeamCarving {
 
 	}
 
-	public int minLigne(final int[] line){
-		int min = Integer.MAX_VALUE;
-		int indice = -1;
-		for(int i = 0; i < line.length; i++){
-			if(line[i] < min){
-				min = line[i];//max
-			  indice = i;//indice du max
-			}
-		}
-		System.out.println(min);
-		return indice;
-
-	}
-
 	public void calculMy(){
 		//cas initial
 		for(int l=0; l < My.length;l++){My[l][0] = energyImage[l][0];}
@@ -180,11 +180,39 @@ public class SeamCarving {
 		}
 	}
 
+	public void getPathY(){
+		// a completer
+	}
+
+	public int minLigne(final int[] line){
+		int min = Integer.MAX_VALUE, indice = -1;
+		for(int i = 0; i < line.length; i++){
+			if(line[i] < min){
+				min = line[i];//max
+				indice = i;//indice du max
+			}
+		}
+		return indice;
+	}
+
+	public static int getPercentage(final String percentage){
+		String pa = percentage; //a modifier pour enlever tout ce qui n'est pas un chiffre
+		int p = 100;
+		try {
+			p = Integer.parseInt(pa);
+		} catch (NumberFormatException e){
+			System.out.println("Erreur dans la saisie des pourentage");
+			System.exit(1);
+		}
+		return p;
+	}
+
 	public static void main(String[] args){
 		if (args.length != 3){
 			System.out.println("Erreur : parametres incorrects. \n Format des parametres : chemin %reductionX %reductionY");
 			System.exit(1);
 		}
+
 
 		try {
 			File inputFile = new File(args[0]);
@@ -193,14 +221,16 @@ public class SeamCarving {
 			System.out.println("Error while opennig image.");
 			System.exit(1);
 		}
-		SeamCarving seam = new SeamCarving(inputImage);
-		seam.setEnergy(0,seam.width,0,seam.height);
-		seam.calculMx();
-		seam.calculMy();
-		seam.getPathX();
+		SeamCarving seam = new SeamCarving(inputImage,"x");
+
+		int required_x = getPercentage(args[1])/100*seam.width;
+		int required_y = getPercentage(args[2])/100*seam.height;
+
+		//print de debug, a enlever
 		printGrille(seam.Mx);
 		System.out.println("\n");
 		printGrille(seam.pathX);
 	}
+
 
 }
