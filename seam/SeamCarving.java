@@ -14,6 +14,8 @@ public class SeamCarving {
 	private int[][] energyImage; //table of each pixels energy
 	private int[][] My;
 	private int[][] Mx;
+	private int[][] pathX;
+	private int[][] pathY;
 
 
 	public SeamCarving(final BufferedImage img){
@@ -22,6 +24,9 @@ public class SeamCarving {
 		this.rgbImage = new int[width][height];
 		this.energyImage = new int[width][height];
 		this.Mx = new int[width][height];
+		this.My = new int[width][height];
+		this.pathX = new int[height][2];
+		this.pathY = new int[width][2];
 		getrgbImage(img);
 	}
 
@@ -33,7 +38,7 @@ public class SeamCarving {
 		}
 	}
 
-	public  void printGrille(final int[][] grille){
+	public static void printGrille(final int[][] grille){
 		for(int i=0; i < grille.length;i++){
 			for(int j=0; j < grille[i].length;j++){
 				System.out.print(grille[i][j]+" ");
@@ -89,11 +94,10 @@ public class SeamCarving {
 		}
 	}
 
-
 	public void calculMx(){
 
 		//cas initial
-		for(int c=0; c < 5; c++){Mx[0][c]= energyImage[0][c];}
+		for(int c=0; c < Mx[0].length; c++){Mx[0][c]= energyImage[0][c];}
 
 		//cas général
 		for (int l = 1 ; l < Mx.length ; l++){
@@ -109,7 +113,78 @@ public class SeamCarving {
 		}
 	}
 
+	public void getPathX(){
+
+		pathX[Mx.length-1][0] = minLigne(Mx[Mx.length-1])[1];
+		pathX[Mx.length-1][1] = Mx.length-1;
+
+		for (int y = Mx.length-1 ; y > 0 ; y--){
+			pathX[y-1][1] = y-1; //on met a jour le y
+			int x_actual = pathX[y][0];
+
+			if (x_actual == 0){//cas ou on est tout a gauche
+				if(Mx[y-1][x_actual] >= Mx[y-1][x_actual+1]){
+					pathX[y-1][0] = x_actual;
+				} else {
+					pathX[y-1][0] = x_actual+1;
+				}
+			}
+
+			else if (x_actual == Mx[0].length -1){ //cas ou on est tout a droite
+				if(Mx[y-1][x_actual] >= Mx[y-1][x_actual-1]){
+					pathX[y-1][0] = x_actual;
+				} else pathX[y-1][0] = x_actual-1;
+			}
+
+
+			else { //cas général
+				if (Mx[y-1][x_actual] >= Mx[y-1][x_actual+1] && Mx[y-1][x_actual] >= Mx[y-1][x_actual-1]) {
+					pathX[y-1][0] = x_actual;
+				}
+				else if (Mx[y-1][x_actual+1] >= Mx[y-1][x_actual] && Mx[y-1][x_actual+1] >= Mx[y-1][x_actual-1]){
+					pathX[y-1][0] = x_actual+1;
+				}
+				else {
+					pathX[y-1][0] = x_actual-1;
+				}
+			}
+		}
+
+	}
+
+	public int[] minLigne(final int[] line){
+		int[] retour = new int[2];
+		retour[0] = Integer.MAX_VALUE;
+		for(int i = 0; i < line.length; i++){
+			if(line[i] < retour[0]){
+				retour[0] = line.length;//max
+			  retour[1] = i;//indice du max
+			}
+		}
+		return retour;
+
+	}
+
+	public void calculMy(){
+		//cas initial
+		for(int l=0; l < My.length;l++){My[l][0] = energyImage[l][0];}
+
+		//cas général
+		for (int c = 1; c < My[0].length ; c++) {
+			for (int l = 0 ; l < My.length ; l++) {
+				if (l == My.length-1) My[l][c] = energyImage[l][c] + Math.min(My[l][c-1], My[l-1][c-1]);
+				else if (l == 0) My[l][c] = energyImage[l][c] + Math.min(My[l][c-1], My[l+1][c-1]);
+				else My [l][c] = energyImage[l][c] + Math.min(My[l-1][c-1], Math.min(My[l][c-1], My[l+1][c-1]));
+			}
+		}
+	}
+
 	public static void main(String[] args){
+		if (args.length != 3){
+			System.out.println("Erreur : parametres incorrects. \n Format des parametres : chemin %reductionX %reductionY");
+			System.exit(1);
+		}
+
 		try {
 			File inputFile = new File(args[0]);
 			inputImage = ImageIO.read(inputFile);
@@ -120,7 +195,11 @@ public class SeamCarving {
 		SeamCarving seam = new SeamCarving(inputImage);
 		seam.setEnergy(0,seam.width,0,seam.height);
 		seam.calculMx();
-		seam.printGrille(seam.Mx);
+		seam.calculMy();
+		seam.getPathX();
+		printGrille(seam.Mx);
+		System.out.println("\n");
+		printGrille(seam.pathX);
 	}
 
 }
