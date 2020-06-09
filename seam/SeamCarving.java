@@ -115,7 +115,7 @@ public class SeamCarving {
 
 	public void getPathX(){
 
-		pathX[Mx.length-1][0] = minLigne(Mx[Mx.length-1])[1];
+		pathX[Mx.length-1][0] = minLigne(Mx[Mx.length-1]);
 		pathX[Mx.length-1][1] = Mx.length-1;
 
 		for (int y = Mx.length-1 ; y > 0 ; y--){
@@ -123,7 +123,7 @@ public class SeamCarving {
 			int x_actual = pathX[y][0];
 
 			if (x_actual == 0){//cas ou on est tout a gauche
-				if(Mx[y-1][x_actual] >= Mx[y-1][x_actual+1]){
+				if(Mx[y-1][x_actual] <= Mx[y-1][x_actual+1]){
 					pathX[y-1][0] = x_actual;
 				} else {
 					pathX[y-1][0] = x_actual+1;
@@ -131,17 +131,17 @@ public class SeamCarving {
 			}
 
 			else if (x_actual == Mx[0].length -1){ //cas ou on est tout a droite
-				if(Mx[y-1][x_actual] >= Mx[y-1][x_actual-1]){
+				if(Mx[y-1][x_actual] <= Mx[y-1][x_actual-1]){
 					pathX[y-1][0] = x_actual;
 				} else pathX[y-1][0] = x_actual-1;
 			}
 
 
 			else { //cas général
-				if (Mx[y-1][x_actual] >= Mx[y-1][x_actual+1] && Mx[y-1][x_actual] >= Mx[y-1][x_actual-1]) {
+				if (Mx[y-1][x_actual] <= Mx[y-1][x_actual+1] && Mx[y-1][x_actual] <= Mx[y-1][x_actual-1]) {
 					pathX[y-1][0] = x_actual;
 				}
-				else if (Mx[y-1][x_actual+1] >= Mx[y-1][x_actual] && Mx[y-1][x_actual+1] >= Mx[y-1][x_actual-1]){
+				else if (Mx[y-1][x_actual+1] <= Mx[y-1][x_actual] && Mx[y-1][x_actual+1] <= Mx[y-1][x_actual-1]){
 					pathX[y-1][0] = x_actual+1;
 				}
 				else {
@@ -152,16 +152,17 @@ public class SeamCarving {
 
 	}
 
-	public int[] minLigne(final int[] line){
-		int[] retour = new int[2];
-		retour[0] = Integer.MAX_VALUE;
+	public int minLigne(final int[] line){
+		int min = Integer.MAX_VALUE;
+		int indice = -1;
 		for(int i = 0; i < line.length; i++){
-			if(line[i] < retour[0]){
-				retour[0] = line.length;//max
-			  retour[1] = i;//indice du max
+			if(line[i] < min){
+				min = line[i];//max
+			  indice = i;//indice du max
 			}
 		}
-		return retour;
+		System.out.println(min);
+		return indice;
 
 	}
 
