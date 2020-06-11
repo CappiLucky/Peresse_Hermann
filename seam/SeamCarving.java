@@ -31,6 +31,7 @@ public class SeamCarving {
 		this.pathY = new int[width][2];
 		this.getrgbImage(img);
 		this.setEnergy();
+
 		if (mode.equals("x")){
 			this.getPathX();
 			this.calculMx();
@@ -178,7 +179,52 @@ public class SeamCarving {
 	}
 
 	public void getPathY(){
-		// a completer
+		pathY[My.length-1][0] = My[0].length-1; //indice du max de la colonne
+		pathY[My.length-1][1] = minColonne();  //numéro de la colonne
+
+		for (int x=Mx[0].length-1; x > 0; x--){
+			pathY[x-1][0] = x-1;
+			int y_actual = pathY[x][1];
+
+			if (y_actual == 0){//cas ou on est tout en haut
+				if(My[x-1][y_actual] <= My[x-1][y_actual+1]){
+					pathY[x-1][1] = y_actual;
+				} else {
+					pathY[x-1][1] = y_actual+1;
+				}
+			}
+
+			else if (y_actual == this.height-1){//cas ou on est tout en bas
+					if(My[x-1][y_actual] <= My[x-1][y_actual - 1]){
+						pathY[x-1][1]=y_actual;
+					} else {
+						pathY[x-1][1]=y_actual-1;
+					}
+			}
+
+			else {//cas général
+				if(My[x-1][y_actual] <= My[x-1][y_actual+1] && My[x-1][y_actual] <= My[x-1][y_actual -1]){
+					pathY[x-1][1] = y_actual;
+				}
+				else if(My[x-1][y_actual +1] <= My[x-1][y_actual] && My[x-1][y_actual+1] <= My[x-1][y_actual-1]){
+					pathY[x-1][1]=y_actual+1;
+				}
+				else {
+					pathY[x-1][1]=y_actual-1;
+				}
+			}
+		}
+	}
+
+	public int minColonne(){
+		int min = Integer.MAX_VALUE, index = -1;
+		for(int i=0; i < height; i++){
+			if (My[i][My.length-1] < min){
+				min = My[i][My.length-1];
+				index = i;
+			}
+		}
+		return index;
 	}
 
 	public int minLigne(final int[] line){
@@ -216,9 +262,10 @@ public class SeamCarving {
 			inputImage = ImageIO.read(inputFile);
 		} catch (Exception e){
 			System.out.println("Error while opennig image.");
+			System.out.println(e.toString());
 			System.exit(1);
 		}
-		SeamCarving seam = new SeamCarving(inputImage,"x");
+		SeamCarving seam = new SeamCarving(inputImage,"y");
 
 		int required_x = getPercentage(args[1])*seam.width/100;
 		int required_y = getPercentage(args[2])*seam.height/100;
@@ -230,13 +277,13 @@ public class SeamCarving {
 			ImageIO.write(inputImage,extension.toUpperCase(),outputFile);//modifier pour metre l'image finale
 		} catch (Exception e){
 			System.out.println(e.toString());
-			//System.exit(1);
+			System.exit(1);
 		}
 
 		//print de debug, a enlever
-		printGrille(seam.Mx);
+		printGrille(seam.My);
 		System.out.println("\n");
-		printGrille(seam.pathX);
+		printGrille(seam.pathY);
 	}
 
 
