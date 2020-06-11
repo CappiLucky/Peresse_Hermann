@@ -179,15 +179,15 @@ public class SeamCarving {
 	}
 
 	public void getPathY(){
-		pathY[My.length-1][0] = My[0].length-1; //indice du max de la colonne
-		pathY[My.length-1][1] = minColonne();  //numéro de la colonne
+		pathY[My.length-1][0] = My[0].length-1; //numéro de la colonne
+		pathY[My.length-1][1] = minColonne();  //indice du max de la colonne
 
 		for (int x=Mx[0].length-1; x > 0; x--){
 			pathY[x-1][0] = x-1;
 			int y_actual = pathY[x][1];
 
 			if (y_actual == 0){//cas ou on est tout en haut
-				if(My[x-1][y_actual] <= My[x-1][y_actual+1]){
+				if(My[y_actual][x-1] <= My[y_actual+1][x-1]){
 					pathY[x-1][1] = y_actual;
 				} else {
 					pathY[x-1][1] = y_actual+1;
@@ -195,7 +195,7 @@ public class SeamCarving {
 			}
 
 			else if (y_actual == this.height-1){//cas ou on est tout en bas
-					if(My[x-1][y_actual] <= My[x-1][y_actual - 1]){
+					if(My[y_actual][x-1] <= My[y_actual - 1][x-1]){
 						pathY[x-1][1]=y_actual;
 					} else {
 						pathY[x-1][1]=y_actual-1;
@@ -203,10 +203,10 @@ public class SeamCarving {
 			}
 
 			else {//cas général
-				if(My[x-1][y_actual] <= My[x-1][y_actual+1] && My[x-1][y_actual] <= My[x-1][y_actual -1]){
+				if(My[y_actual][x-1] <= My[y_actual+1][x-1] && My[y_actual][x-1] <= My[y_actual -1][x-1]){
 					pathY[x-1][1] = y_actual;
 				}
-				else if(My[x-1][y_actual +1] <= My[x-1][y_actual] && My[x-1][y_actual+1] <= My[x-1][y_actual-1]){
+				else if(My[y_actual +1][x-1] <= My[y_actual][x-1] && My[y_actual+1][x-1] <= My[y_actual-1][x-1]){
 					pathY[x-1][1]=y_actual+1;
 				}
 				else {
