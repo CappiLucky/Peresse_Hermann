@@ -32,14 +32,20 @@ public class SeamCarving {
 		this.getrgbImage(img);
 		this.setEnergy();
 
-		if (mode.equals("x")){
-			this.getPathX();
+		if(mode.equals("x")){
 			this.calculMx();
+			this.getPathX();
 		}
-		if (mode.equals("y")){
+		else if(mode.equals("y")){
 			this.calculMy();
 			this.getPathY();
+		} else if(mode.equals("0")){
+			return;
+		} else {
+			System.out.println("error mode");
+			System.exit(1);
 		}
+
 	}
 
 	public void getrgbImage(final BufferedImage inputImage){
@@ -238,6 +244,43 @@ public class SeamCarving {
 		return indice;
 	}
 
+	public static BufferedImage removeX(final BufferedImage img, final int[][] pathx){
+		BufferedImage new_img = new BufferedImage(img.getWidth()-1, img.getHeight(),img.getType());
+
+		for (int y = 0; y < new_img.getHeight();y++){
+			int xp=0;
+			for( int x = 0; x < new_img.getWidth();x++){
+					xp++;
+					if(x == pathx[x][0] && y == pathx[x][1]){
+						x++;
+					} else {
+						new_img.setRGB(x,y,img.getRGB(xp,y));
+					}
+			}
+			xp=0;
+		}
+
+		return new_img;
+	}
+
+	public static BufferedImage removeY (final BufferedImage img, final int [][] pathy) {
+		BufferedImage new_img = new BufferedImage(img.getWidth(), img.getHeight()-1, img.getType());
+
+		for (int x = 0; x < new_img.getWidth();x++){
+			int yp=0;
+			for( int y = 0; y < new_img.getHeight();y++){
+					yp++;
+					if(x == pathy[y][0] && y == pathy[y][1]){
+						y++;
+					} else {
+						new_img.setRGB(x,y,img.getRGB(x,yp));
+					}
+			}
+			yp = 0;
+		}
+		return new_img;
+	}
+
 	public static int getPercentage(final String percentage){
 		String pa = percentage; //a modifier pour enlever tout ce qui n'est pas un chiffre
 		int p = 100;
@@ -250,40 +293,56 @@ public class SeamCarving {
 		return p;
 	}
 
+public static void openImg(final String path){
+	try {
+		File inputFile = new File(path);
+		inputImage = ImageIO.read(inputFile);
+	} catch (Exception e){
+		System.out.println("Error while opennig image.");
+		System.out.println(e.toString());
+		System.exit(1);
+	}
+}
+
 	public static void main(String[] args){
 		if (args.length != 3){
 			System.out.println("Erreur : parametres incorrects. \n Format des parametres : chemin %reductionX %reductionY");
 			System.exit(1);
 		}
 
+		openImg(args[0]);
 
-		try {
-			File inputFile = new File(args[0]);
-			inputImage = ImageIO.read(inputFile);
-		} catch (Exception e){
-			System.out.println("Error while opennig image.");
-			System.out.println(e.toString());
-			System.exit(1);
-		}
-		SeamCarving seam = new SeamCarving(inputImage,"y");
-
+		SeamCarving seam = new SeamCarving(inputImage,"x");
+		printGrille(seam.pathX);
 		int required_x = getPercentage(args[1])*seam.width/100;
 		int required_y = getPercentage(args[2])*seam.height/100;
+
+		outputImage = inputImage;
+
+		for(int i=outputImage.getWidth(); i > required_x; i--){
+			seam = new SeamCarving(seam.outputImage,"x");
+			seam.outputImage = removeX(outputImage,seam.pathX);
+		}
+
+		for(int j=outputImage.getWidth();j > required_y;j--){
+			seam = new SeamCarving(seam.outputImage,"y");
+			seam.outputImage = removeY(outputImage,seam.pathY);
+		}
+
+
+
 
 		String extension = args[0].split("\\.")[1];
 
 		try {
 			File outputFile = new File(String.valueOf(required_x)+"x"+String.valueOf(required_y)+args[0]);
-			ImageIO.write(inputImage,extension.toUpperCase(),outputFile);//modifier pour metre l'image finale
+			ImageIO.write(outputImage,extension.toUpperCase(),outputFile); //modifier pour metre l'image finale
 		} catch (Exception e){
 			System.out.println(e.toString());
 			System.exit(1);
 		}
 
-		//print de debug, a enlever
-		printGrille(seam.My);
-		System.out.println("\n");
-		printGrille(seam.pathY);
+
 	}
 
 
