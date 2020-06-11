@@ -188,7 +188,7 @@ public class SeamCarving {
 		pathY[My.length-1][0] = My[0].length-1; //numéro de la colonne
 		pathY[My.length-1][1] = minColonne();  //indice du max de la colonne
 
-		for (int x=Mx[0].length-1; x > 0; x--){
+		for (int x= this.width-1; x > 0; x--){
 			pathY[x-1][0] = x-1;
 			int y_actual = pathY[x][1];
 
@@ -223,10 +223,10 @@ public class SeamCarving {
 	}
 
 	public int minColonne(){
-		int min = Integer.MAX_VALUE, index = -1;
+		int min = Integer.MAX_VALUE, index = 0;
 		for(int i=0; i < height; i++){
-			if (My[i][My.length-1] < min){
-				min = My[i][My.length-1];
+			if (My[My.length-1][i] < min){
+				min = My[My.length-1][i];
 				index = i;
 			}
 		}
@@ -250,12 +250,12 @@ public class SeamCarving {
 		for (int y = 0; y < new_img.getHeight();y++){
 			int xp=0;
 			for( int x = 0; x < new_img.getWidth();x++){
-					xp++;
-					if(x == pathx[x][0] && y == pathx[x][1]){
-						x++;
+					if(x == pathx[y][0]){
+						xp++;
 					} else {
 						new_img.setRGB(x,y,img.getRGB(xp,y));
 					}
+					xp++;
 			}
 			xp=0;
 		}
@@ -269,12 +269,12 @@ public class SeamCarving {
 		for (int x = 0; x < new_img.getWidth();x++){
 			int yp=0;
 			for( int y = 0; y < new_img.getHeight();y++){
-					yp++;
-					if(x == pathy[y][0] && y == pathy[y][1]){
+					if(x == pathy[x][0]){
 						y++;
 					} else {
 						new_img.setRGB(x,y,img.getRGB(x,yp));
 					}
+					yp++;
 			}
 			yp = 0;
 		}
@@ -293,7 +293,7 @@ public class SeamCarving {
 		return p;
 	}
 
-public static void openImg(final String path){
+	public static void openImg(final String path){
 	try {
 		File inputFile = new File(path);
 		inputImage = ImageIO.read(inputFile);
@@ -312,19 +312,17 @@ public static void openImg(final String path){
 
 		openImg(args[0]);
 
-		SeamCarving seam = new SeamCarving(inputImage,"x");
-		printGrille(seam.pathX);
+		SeamCarving seam = new SeamCarving(inputImage,"0");
 		int required_x = getPercentage(args[1])*seam.width/100;
 		int required_y = getPercentage(args[2])*seam.height/100;
 
 		outputImage = inputImage;
-
 		for(int i=outputImage.getWidth(); i > required_x; i--){
 			seam = new SeamCarving(seam.outputImage,"x");
 			seam.outputImage = removeX(outputImage,seam.pathX);
 		}
 
-		for(int j=outputImage.getWidth();j > required_y;j--){
+		for(int j=outputImage.getHeight();j > required_y;j--){
 			seam = new SeamCarving(seam.outputImage,"y");
 			seam.outputImage = removeY(outputImage,seam.pathY);
 		}
@@ -344,6 +342,4 @@ public static void openImg(final String path){
 
 
 	}
-
-
 }
