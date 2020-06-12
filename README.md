@@ -1,9 +1,13 @@
 # Peresse_Hermann
-Projet d'algothmie, fin de 2 eme année à l'ESIEE Paris.
+Projet d'algothmie, fin de 2 eme année à l'ESIEE Paris.   
 Fait par Théo PERESSE-GOURBIL et Manon HERMANN
 
-Exercice 1 : algorithme glouton (Coccinelle)
+
+
+Exercice 1 : algorithme glouton (Coccinelle)   
 Exercice 2 : redimensionnement d'image
+
+
 
 __Arboresence des fichiers :__
  * dossier Coccinelle :
