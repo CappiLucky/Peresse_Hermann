@@ -211,7 +211,7 @@ public class Coccinelle {
 
 	/**
 	 * Permet d'afficher la case passée en parametres
-	 * @param la case a afficher
+	 * @param cellule la case a afficher
 	 */
 	public static void printCase(final int[] cellule){
 		System.out.println("("+cellule[0]+","+cellule[1]+").");
