@@ -412,7 +412,7 @@ public class SeamCarving {
 		String extension = args[0].split("\\.")[1];
 
 		try {
-			File outputFile = new File(String.valueOf(required_x)+"x"+String.valueOf(required_y)+args[0]);
+			File outputFile = new File(args[0].split("\\.")[0]+String.valueOf(required_x)+"x"+String.valueOf(required_y)+"."+extension);
 			ImageIO.write(outputImage,extension.toUpperCase(),outputFile);
 		} catch (Exception e){
 			System.out.println(e.toString());
