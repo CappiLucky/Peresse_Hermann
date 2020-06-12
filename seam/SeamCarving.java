@@ -246,9 +246,9 @@ public class SeamCarving {
 
 	public static BufferedImage removeX(final BufferedImage img, final int[][] pathx){
 		BufferedImage new_img = new BufferedImage(img.getWidth()-1, img.getHeight(),img.getType());
-
+		int xp=0;
 		for (int y = 0; y < new_img.getHeight();y++){
-			int xp=0;
+			xp=0;
 			for( int x = 0; x < new_img.getWidth();x++){
 					if(x == pathx[y][0]){
 						xp++;
@@ -257,7 +257,6 @@ public class SeamCarving {
 					}
 					xp++;
 			}
-			xp=0;
 		}
 
 		return new_img;
@@ -265,18 +264,17 @@ public class SeamCarving {
 
 	public static BufferedImage removeY (final BufferedImage img, final int [][] pathy) {
 		BufferedImage new_img = new BufferedImage(img.getWidth(), img.getHeight()-1, img.getType());
-
+		int yp = 0;
 		for (int x = 0; x < new_img.getWidth();x++){
-			int yp=0;
+			yp=0;
 			for( int y = 0; y < new_img.getHeight();y++){
-					if(x == pathy[x][0]){
+					if(y == pathy[x][0]){
 						y++;
 					} else {
 						new_img.setRGB(x,y,img.getRGB(x,yp));
 					}
 					yp++;
 			}
-			yp = 0;
 		}
 		return new_img;
 	}
