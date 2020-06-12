@@ -250,11 +250,11 @@ public class SeamCarving {
 		for (int y = 0; y < new_img.getHeight();y++){
 			xp=0;
 			for( int x = 0; x < new_img.getWidth();x++){
-					if(x == pathx[y][0]){
+					if(xp == pathx[y][0]){
 						xp++;
-					} else {
-						new_img.setRGB(x,y,img.getRGB(xp,y));
 					}
+					new_img.setRGB(x,y,img.getRGB(xp,y));
+
 					xp++;
 			}
 		}
@@ -265,17 +265,16 @@ public class SeamCarving {
 	public static BufferedImage removeY (final BufferedImage img, final int [][] pathy) {
 		BufferedImage new_img = new BufferedImage(img.getWidth(), img.getHeight()-1, img.getType());
 		int yp = 0;
-		for (int x = 0; x < new_img.getWidth();x++){
+		for (int x = 0; x < new_img.getWidth() -1;x++){
 			yp=0;
-			for( int y = 0; y < new_img.getHeight();y++){
-					if(y == pathy[x][1]){
+			for( int y = 0; y < new_img.getHeight() -1;y++){
+					if(yp	 == pathy[x][1]){
 						yp++;
-					} else {
-						new_img.setRGB(x,y,img.getRGB(x,yp));
 					}
+					new_img.setRGB(x,y,img.getRGB(x,yp));
 					yp++;
 			}
-		}
+		} // et si t'enleve celui du main XD ca va marcher c est sur. faut pas mettre getWidth -1 ? ET PAREIL POUR LA HAUTEUR c est ca !
 		return new_img;
 	}
 
