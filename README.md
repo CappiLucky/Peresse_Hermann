@@ -7,18 +7,18 @@ Exercice 2 : redimensionnement d'image
 
 __Arboresence des fichiers :__
  * dossier Coccinelle :
-  * dossier javadoc : *contient la javadoc de Coccinelle.java*
-  * Coccinelle.java
+   * dossier javadoc : *contient la javadoc de Coccinelle.java*
+   * Coccinelle.java
  * dossier LaTeX :
-  * image logo_esiee.jpeg
-  * Peresse_Hermann.tex
+   * image logo_esiee.jpeg
+   * Peresse_Hermann.tex
  * dossier SeamCarving :
-  * dossier exemple :
-   * dossier fails : *contient les images redimenssionner avec erreurs*
-   * images
-  * dossier src :
-   * dossier javadoc : *contient la javadoc de SeamCarving.java*
-   * SeamCarving.java
-  * Seamcarving.class
- * dossier Sujet : *contient le sujet du projet*
- * README.md 
+   * dossier exemple :
+     * dossier fails : *contient les images redimenssionner avec erreurs*
+     * images
+   * dossier src :
+     * dossier javadoc : *contient la javadoc de SeamCarving.java*
+     * SeamCarving.java
+   * Seamcarving.class
+  * dossier Sujet : *contient le sujet du projet*
+  * README.md 
