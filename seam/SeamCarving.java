@@ -57,15 +57,15 @@ public class SeamCarving {
 	}
 
 	public static void printGrille(final int[][] grille){
-		for(int i=0; i < grille.length;i++){
-			for(int j=0; j < grille[i].length;j++){
-				System.out.print(grille[i][j]+" ");
+		for(int y=0; y < grille[0].length;y++){
+			for(int x=0; x < grille.length;x++){
+				System.out.print(grille[x][y]+" ");
 			}
 			System.out.println("");
 		}
 	}
 
-	private  int getLuminance(final int rgb) {
+	private  int getLuminance(final int rgb){
 		int r = (rgb >>16 ) & 0xFF;
 		int g = (rgb >> 8 ) & 0xFF;
 		int b = rgb & 0xFF;
@@ -115,51 +115,51 @@ public class SeamCarving {
 	public void calculMx(){
 
 		//cas initial
-		for(int c=0; c < Mx[0].length; c++){Mx[0][c]= energyImage[0][c];}
+		for(int x=0; x < Mx.length; x++){Mx[x][0]= energyImage[x][0];}
 
 		//cas général
-		for (int l = 1 ; l < Mx.length ; l++){
+		for (int y = 1 ; y < Mx[0].length ; y++){
 
-			for(int c = 0 ; c < Mx[0].length; c++){
+			for(int x = 0 ; x < Mx.length; x++){
 
-				if(c == Mx[0].length-1) Mx[l][c] = energyImage[l][c] + Math.min(Mx[l-1][c],Mx[l-1][c-1]);
+				if(x == Mx.length-1) Mx[x][y] = energyImage[x][y] + Math.min(Mx[x][y-1],Mx[x-1][y-1]);
 
-				else if (c == 0) Mx[l][c]= energyImage[l][c]+ Math.min(Mx[l-1][c],Mx[l-1][c+1]);
+				else if (x == 0) Mx[x][y]= energyImage[x][y]+ Math.min(Mx[x][y-1],Mx[x+1][y-1]);
 
-				else Mx[l][c] = energyImage[l][c] + Math.min(Mx[l-1][c-1],Math.min(Mx[l-1][c],Mx[l-1][c+1]));
+				else Mx[x][y] = energyImage[x][y] + Math.min(Mx[x-1][y-1],Math.min(Mx[x][y-1],Mx[x+1][y-1]));
 			}
 		}
 	}
 
 	public void getPathX(){
 
-		pathX[Mx.length-1][0] = minLigne(Mx[Mx.length-1]);
-		pathX[Mx.length-1][1] = Mx.length-1;
+		pathX[Mx[0].length-1][0] = minLigne();
+		pathX[Mx[0].length-1][1] = Mx[0].length-1;
 
-		for (int y = Mx.length-1 ; y > 0 ; y--){
+		for (int y = Mx[0].length-1 ; y > 0 ; y--){
 			pathX[y-1][1] = y-1; //on met a jour le y
 			int x_actual = pathX[y][0];
 
 			if (x_actual == 0){//cas ou on est tout a gauche
-				if(Mx[y-1][x_actual] <= Mx[y-1][x_actual+1]){
+				if(Mx[x_actual][y-1] <= Mx[x_actual+1][y-1]){
 					pathX[y-1][0] = x_actual;
 				} else {
 					pathX[y-1][0] = x_actual+1;
 				}
 			}
 
-			else if (x_actual == Mx[0].length -1){ //cas ou on est tout a droite
-				if(Mx[y-1][x_actual] <= Mx[y-1][x_actual-1]){
+			else if (x_actual == Mx.length -1){ //cas ou on est tout a droite
+				if(Mx[x_actual][y-1] <= Mx[x_actual-1][y-1]){
 					pathX[y-1][0] = x_actual;
 				} else pathX[y-1][0] = x_actual-1;
 			}
 
 
 			else { //cas général
-				if (Mx[y-1][x_actual] <= Mx[y-1][x_actual+1] && Mx[y-1][x_actual] <= Mx[y-1][x_actual-1]) {
+				if (Mx[x_actual][y-1] <= Mx[x_actual+1][y-1] && Mx[x_actual][y-1] <= Mx[x_actual-1][y-1]) {
 					pathX[y-1][0] = x_actual;
 				}
-				else if (Mx[y-1][x_actual+1] <= Mx[y-1][x_actual] && Mx[y-1][x_actual+1] <= Mx[y-1][x_actual-1]){
+				else if (Mx[x_actual+1][y-1] <= Mx[x_actual][y-1] && Mx[x_actual+1][y-1] <= Mx[x_actual-1][y-1]){
 					pathX[y-1][0] = x_actual+1;
 				}
 				else {
@@ -172,28 +172,28 @@ public class SeamCarving {
 
 	public void calculMy(){
 		//cas initial
-		for(int l=0; l < My.length;l++){My[l][0] = energyImage[l][0];}
+		for(int y=0; y < My[0].length;y++){My[0][y] = energyImage[0][y];}
 
 		//cas général
-		for (int c = 1; c < My[0].length ; c++) {
-			for (int l = 0 ; l < My.length ; l++) {
-				if (l == My.length-1) My[l][c] = energyImage[l][c] + Math.min(My[l][c-1], My[l-1][c-1]);
-				else if (l == 0) My[l][c] = energyImage[l][c] + Math.min(My[l][c-1], My[l+1][c-1]);
-				else My [l][c] = energyImage[l][c] + Math.min(My[l-1][c-1], Math.min(My[l][c-1], My[l+1][c-1]));
+		for (int x = 1; x < My.length ; x++) {
+			for (int y = 0 ; y < My[x].length ; y++) {
+				if (y == My[0].length-1) My[x][y] = energyImage[x][y] + Math.min(My[x-1][y], My[x-1][y-1]);//tout en bas
+				else if (y == 0) My[x][y] = energyImage[x][y] + Math.min(My[x-1][y], My[x-1][y+1]);//tout en haut
+				else My[x][y] = energyImage[x][y] + Math.min(My[x-1][y-1], Math.min(My[x-1][y], My[x-1][y+1]));//cas general
 			}
 		}
 	}
 
 	public void getPathY(){
-		pathY[My.length-1][0] = My[0].length-1; //numéro de la colonne
-		pathY[My.length-1][1] = minColonne();  //indice du max de la colonne
+		pathY[My.length-1][0] = My.length-1; //x
+		pathY[My.length-1][1] = minColonne();  //y
 
 		for (int x= this.width-1; x > 0; x--){
 			pathY[x-1][0] = x-1;
 			int y_actual = pathY[x][1];
 
 			if (y_actual == 0){//cas ou on est tout en haut
-				if(My[y_actual][x-1] <= My[y_actual+1][x-1]){
+				if(My[x-1][y_actual] <= My[x-1][y_actual+1]){
 					pathY[x-1][1] = y_actual;
 				} else {
 					pathY[x-1][1] = y_actual+1;
@@ -201,7 +201,7 @@ public class SeamCarving {
 			}
 
 			else if (y_actual == this.height-1){//cas ou on est tout en bas
-					if(My[y_actual][x-1] <= My[y_actual - 1][x-1]){
+					if(My[x-1][y_actual] <= My[x-1][y_actual - 1]){
 						pathY[x-1][1]=y_actual;
 					} else {
 						pathY[x-1][1]=y_actual-1;
@@ -209,10 +209,10 @@ public class SeamCarving {
 			}
 
 			else {//cas général
-				if(My[y_actual][x-1] <= My[y_actual+1][x-1] && My[y_actual][x-1] <= My[y_actual -1][x-1]){
+				if(My[x-1][y_actual] <= My[x-1][y_actual+1] && My[x-1][y_actual] <= My[x-1][y_actual -1]){
 					pathY[x-1][1] = y_actual;
 				}
-				else if(My[y_actual +1][x-1] <= My[y_actual][x-1] && My[y_actual+1][x-1] <= My[y_actual-1][x-1]){
+				else if(My[x-1][y_actual +1] <= My[x-1][y_actual] && My[x-1][y_actual+1] <= My[x-1][y_actual-1]){
 					pathY[x-1][1]=y_actual+1;
 				}
 				else {
@@ -223,22 +223,22 @@ public class SeamCarving {
 	}
 
 	public int minColonne(){
-		int min = Integer.MAX_VALUE, index = 0;
-		for(int i=0; i < height; i++){
-			if (My[My.length-1][i] < min){
-				min = My[My.length-1][i];
-				index = i;
+		int min = Integer.MAX_VALUE, indice = 0;
+		for(int y=0; y < height; y++){
+			if (My[My.length-1][y] < min){
+				min = My[My.length-1][y];
+				indice = y;
 			}
 		}
-		return index;
+		return indice;
 	}
 
-	public int minLigne(final int[] line){
+	public int minLigne(){
 		int min = Integer.MAX_VALUE, indice = -1;
-		for(int i = 0; i < line.length; i++){
-			if(line[i] < min){
-				min = line[i];//max
-				indice = i;//indice du max
+		for(int x = 0; x < width; x++){
+			if(Mx[x][Mx[0].length-1] < min){
+				min = Mx[x][Mx[0].length-1];//max
+				indice = x;//indice du max
 			}
 		}
 		return indice;
@@ -268,8 +268,8 @@ public class SeamCarving {
 		for (int x = 0; x < new_img.getWidth();x++){
 			yp=0;
 			for( int y = 0; y < new_img.getHeight();y++){
-					if(y == pathy[x][0]){
-						y++;
+					if(y == pathy[x][1]){
+						yp++;
 					} else {
 						new_img.setRGB(x,y,img.getRGB(x,yp));
 					}
@@ -292,15 +292,15 @@ public class SeamCarving {
 	}
 
 	public static void openImg(final String path){
-	try {
-		File inputFile = new File(path);
-		inputImage = ImageIO.read(inputFile);
-	} catch (Exception e){
-		System.out.println("Error while opennig image.");
-		System.out.println(e.toString());
-		System.exit(1);
+		try {
+			File inputFile = new File(path);
+			inputImage = ImageIO.read(inputFile);
+		} catch (Exception e){
+			System.out.println("Error while opennig image.");
+			System.out.println(e.toString());
+			System.exit(1);
+		}
 	}
-}
 
 	public static void main(String[] args){
 		if (args.length != 3){
@@ -315,15 +315,21 @@ public class SeamCarving {
 		int required_y = getPercentage(args[2])*seam.height/100;
 
 		outputImage = inputImage;
-		for(int i=outputImage.getWidth(); i > required_x; i--){
+
+
+
+		for(int i=outputImage.getWidth(); i >= required_x; i--){
 			seam = new SeamCarving(seam.outputImage,"x");
-			seam.outputImage = removeX(outputImage,seam.pathX);
+			outputImage = removeX(outputImage,seam.pathX);
 		}
 
-		for(int j=outputImage.getHeight();j > required_y;j--){
+
+		for(int j=outputImage.getHeight();j >= required_y;j--){
 			seam = new SeamCarving(seam.outputImage,"y");
-			seam.outputImage = removeY(outputImage,seam.pathY);
+			outputImage = removeY(outputImage,seam.pathY);
 		}
+
+
 
 
 
@@ -337,6 +343,7 @@ public class SeamCarving {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
+
 
 
 	}
