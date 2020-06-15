@@ -394,8 +394,8 @@ public class SeamCarving {
 		openImg(args[0]);
 
 		SeamCarving seam = new SeamCarving(inputImage,"0");
-		int required_x = getPercentage(args[1])*seam.width/100;
-		int required_y = getPercentage(args[2])*seam.height/100;
+		int required_x =seam.width  - (getPercentage(args[1])*seam.width/100);
+		int required_y =seam.height - (getPercentage(args[2])*seam.height/100);
 
 		outputImage = inputImage;
 
