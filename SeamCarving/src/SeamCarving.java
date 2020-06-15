@@ -399,12 +399,12 @@ public class SeamCarving {
 
 		outputImage = inputImage;
 
-		for(int i=outputImage.getWidth(); i >= required_x; i--){
+		for(int i=outputImage.getWidth(); i > required_x; i--){
 			seam = new SeamCarving(seam.outputImage,"x");
 			outputImage = removeX(outputImage,seam.pathX);
 		}
 
-		for(int j=outputImage.getHeight();j >= required_y;j--){
+		for(int j=outputImage.getHeight();j > required_y;j--){
 			seam = new SeamCarving(seam.outputImage,"y");
 			outputImage = removeY(outputImage,seam.pathY);
 		}
